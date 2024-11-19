@@ -74,6 +74,7 @@ public class TokenController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult> Register(Usuario user)
     {
+        user.Password = SecurityUtils.HashString(user.Password!);
         string confirm = await _service.CreateUser(user);
         return confirm == "OK"
         ? HttpUtils.CreateHttpResponse<OkResult>("Ya puedes hacer login.")
