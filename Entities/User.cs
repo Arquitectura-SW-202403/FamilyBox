@@ -1,20 +1,22 @@
 ﻿namespace Entities;
 
-public enum UserType {
-    USER,
-    ADMIN,
-    MEMBER
-}
-
-public class User
+public class Usuario
 {
-    public string id {get; set;}
-    public string password {get; set;}
-    public string name {get; set;}
-    public string phone {get; set;}
-    public int phoneCode {get; set;}
-    public UserType type {get; set;}
-    public string email {get; set;}
-    public bool verified {get; set;}
-   public string? billingInfoId {get; set;}
+    public string? UsuarioId { get; set; }
+    public string? TipoDocumento { get; set; }
+    public string? Nombre { get; set; }
+    public string? Apellido { get; set; }
+    public string? Email { get; set; }
+    public string? Telefono { get; set; }
+    public string? Password { get; set; }
+    public TipoUsuario TipoUsuario { get; set; } // Mirar
+    public DateTime FechaRegistro { get; set; }
+    public bool Estado { get; set; }
+}
+public enum TipoUsuario
+{
+    Admin,
+    Beneficiario,
+    Afiliado,
+    Normal
 }

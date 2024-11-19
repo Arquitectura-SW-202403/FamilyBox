@@ -15,11 +15,11 @@ public class UserContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<User>()
+        modelBuilder.Entity<Usuario>()
         .ToCollection("users")
-        .HasKey("id")
+        .HasKey("UsuarioId")
         ;
     }
 
-    public DbSet<User> Users {get; set; } = null;
+    public DbSet<Usuario> Users {get; set; } = null;
 }

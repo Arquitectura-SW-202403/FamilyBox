@@ -20,19 +20,19 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<Usuario>>> GetUsers()
     {
         return HttpUtils.CreateHttpResponse<OkResult>(await _service.GetUsers());
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUsersById(String id)
+    public async Task<ActionResult<Usuario>> GetUsersById(String id)
     {
         return HttpUtils.CreateHttpResponse<OkResult>(await _service.GetUserById(id));
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateUser(User user)
+    public async Task<ActionResult> CreateUser(Usuario user)
     {
 
         
@@ -51,9 +51,9 @@ public class UsersController : ControllerBase
 
     [Authorize]
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutUser(String id, User user) 
+    public async Task<IActionResult> PutUser(string id, Usuario user) 
     {
-        if (id != user.id) return BadRequest();
+        if (id != user.UsuarioId) return BadRequest();
         string confirm = await _service.UpdateUser(user);
         return confirm  == "OK" 
         ? HttpUtils.CreateHttpResponse<OkResult>("Usuario actualizado.") 
@@ -62,7 +62,7 @@ public class UsersController : ControllerBase
 
     [Authorize]
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteUser(String id)
+    public async Task<ActionResult> DeleteUser(string id)
     {
         string confirm = await _service.DeleteUser(id);
         return confirm != "OK" 

@@ -17,21 +17,21 @@ public class UserService : IUserService
         _context = context;
     }
 
-    public async Task<User?> GetUserById(String id)
+    public async Task<Usuario?> GetUserById(String id)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.id == id);
+        return await _context.Users.FirstOrDefaultAsync(x => x.UsuarioId == id);
     }
 
-    public async Task<List<User>> GetUsers()
+    public async Task<List<Usuario>> GetUsers()
     {
         return await _context.Users.ToListAsync();
     }
 
-    public async Task<string> CreateUser(User nw) 
+    public async Task<string> CreateUser(Usuario nw) 
     {  
         try {
 
-            var user =  _context.Users.FirstOrDefault(u => u.id == nw.id);
+            var user =  _context.Users.FirstOrDefault(u => u.UsuarioId == nw.UsuarioId);
             Console.WriteLine(user);
             if (user != null) return "Usuario ya existente";
             _context.Add(nw);
@@ -43,7 +43,7 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<string> UpdateUser(User updt) 
+    public async Task<string> UpdateUser(Usuario updt) 
     {
         try {
             _context.Entry(updt).State = EntityState.Modified;
@@ -58,7 +58,7 @@ public class UserService : IUserService
 
     }
 
-    public async Task<string> DeleteUser(String id)
+    public async Task<string> DeleteUser(string id)
     {
         var user = await _context.Users.FindAsync(id);
         if (user == null) return "Este usuario no existe";
@@ -69,8 +69,8 @@ public class UserService : IUserService
         return "OK";
     }
 
-    private bool UserExist(String id)
+    private bool UserExist(string id)
     {
-        return _context.Users.Any(e => e.id == id);
+        return _context.Users.Any(e => e.UsuarioId == id);
     }
 }

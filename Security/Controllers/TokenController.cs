@@ -34,22 +34,22 @@ public class TokenController : ControllerBase
 
         Username username = HttpUtils.DecodeBasicAuth(header.ToString());
 
-        User? user = await _service.GetUserById(username.user);
+        Usuario? user = await _service.GetUserById(username.user);
 
         if (user == null) {
             return HttpUtils.CreateHttpResponse<BadRequestResult>("No existe el usuario.");
         }
 
-        if (!SecurityUtils.VerifyHash(username.password, user.password))
+        if (!SecurityUtils.VerifyHash(username.password, user.Password!))
         {
             return HttpUtils.CreateHttpResponse<BadRequestResult>("Hay algo mal en la información.");
         }
 
         var claims = new List<Claim> {
-            new Claim(ClaimTypes.NameIdentifier, user.id),
-            new Claim(ClaimTypes.Email, user.email),
-            new Claim(ClaimTypes.Name, user.name),
-            new Claim(ClaimTypes.Role, user.type.ToString())
+            new Claim(ClaimTypes.NameIdentifier, user.UsuarioId!),
+            new Claim(ClaimTypes.Email, user.Email!),
+            new Claim(ClaimTypes.Name, user.Nombre!),
+            new Claim(ClaimTypes.Role, user.TipoUsuario.ToString())
         };
 
         var jwtToken = new JwtSecurityToken(
@@ -72,7 +72,7 @@ public class TokenController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> Register(User user)
+    public async Task<ActionResult> Register(Usuario user)
     {
         string confirm = await _service.CreateUser(user);
         return confirm == "OK"
