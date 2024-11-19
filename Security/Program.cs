@@ -67,6 +67,9 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<NotFoundCustomMiddleware>();
 app.UseHttpsRedirection();
 
+app.UseCors(
+    opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

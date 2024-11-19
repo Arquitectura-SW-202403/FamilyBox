@@ -13,24 +13,32 @@ export default function Home() {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    // Hardcoded users
-    const users = [
-      { email: 'admin@familiarbox.com', password: 'admin123', role: 'admin' },
-      { email: 'user@familiarbox.com', password: 'user123', role: 'user' },
-    ];
+    const response = await fetch(`${process.env.securityUrl}/api/token/login`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        "Authorization": `Basic ${btoa(`${email}:${password}`)}`
+      },
+    })
 
-    const user = users.find(u => u.email === email && u.password === password);
+    const data = await response.json()
 
-    if (user) {
-      localStorage.setItem('authToken', JSON.stringify({ role: user.role }));
-      router.push(`/${user.role}/dashboard`);
-    } else {
-      setError('Correo electrónico o contraseña inválidos');
+    console.log(data)
+
+    if (response.status == 400) {
+      setError('Cedula o contraseña inválidos');
+      setEmail(""); setPassword("");
+      return;
     }
+    data.result.user.rol = data.result.user.rol === "Admin" ? "admin" : "user";
+    localStorage.setItem('jwt', JSON.stringify(data.result));
+
+    const role = data.result.user.rol === "Admin" ? "admin" : "user";
+    router.push(`/${role}/dashboard`);
   };
 
   return (
@@ -50,11 +58,11 @@ export default function Home() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Correo electrónico</Label>
+            <Label htmlFor="email">Cedula</Label>
             <Input
-              type="email"
+              type="text"
               id="email"
-              placeholder="correo@ejemplo.com"
+              placeholder="xxxxx"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

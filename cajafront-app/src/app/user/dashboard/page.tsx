@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
@@ -9,17 +9,18 @@ import LogoutButton from '@/components/ui/LogoutButton'
 
 export default function UserDashboard() {
   const router = useRouter()
-
+  const [user, setUser] = useState({});
   useEffect(() => {
-    const authToken = localStorage.getItem('authToken')
+    const authToken = localStorage.getItem('jwt')
     if (!authToken) {
       router.push('/')
       return
     }
 
     try {
-      const { role } = JSON.parse(authToken)
-      if (role !== 'user') {
+      const { token, user } = JSON.parse(authToken)
+      setUser(user);
+      if (user.rol !== 'user') {
         router.push('/unauthorized')
       }
     } catch (error) {
@@ -35,7 +36,10 @@ export default function UserDashboard() {
         <LogoutButton />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
+        {
+          user.rol == "user"
+          ? (
+            <Card>
           <CardHeader>
             <CardTitle>Mis Reservas</CardTitle>
             <CardDescription>Ver y gestionar tus reservas</CardDescription>
@@ -46,6 +50,8 @@ export default function UserDashboard() {
             </Button>
           </CardContent>
         </Card>
+          ) : ("")
+        }
         <Card>
           <CardHeader>
             <CardTitle>Reservar Espacio</CardTitle>

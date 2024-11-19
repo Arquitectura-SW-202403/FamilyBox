@@ -65,9 +65,14 @@ public class TokenController : ControllerBase
         );
 
         return HttpUtils.CreateHttpResponse<OkResult>(
-            new JwtSecurityTokenHandler(
-                
-            ).WriteToken(jwtToken)
+            new {
+                token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
+                user = new {
+                    nombre = user.Nombre,
+                    id = user.UsuarioId,
+                    rol = user.TipoUsuario.ToString()
+                }
+            }
         );
     }
 

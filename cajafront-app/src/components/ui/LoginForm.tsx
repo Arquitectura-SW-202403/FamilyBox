@@ -12,16 +12,19 @@ export default function LoginForm() {
     e.preventDefault()
     // Aquí deberías implementar la lógica de autenticación
     // Por ejemplo, una llamada a una API de autenticación
-    const response = await fetch('/api/login', {
+    const response = await fetch(`${process.env.securityUrl}/api/login`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      headers: { 
+        'Content-Type': 'application/json',
+        "Authorization": `Basic ${btoa(`${email}:${password}`)}`
+      },
     })
 
     if (response.ok) {
       const data = await response.json()
+      console.log(data)
       // Guardar el token de autenticación en localStorage o en una cookie segura
-      localStorage.setItem('authToken', data.token)
+      localStorage.setItem('authToken', data.result)
       // Redirigir al usuario según su rol
       if (data.role === 'admin') {
         router.push('/admin/dashboard')
