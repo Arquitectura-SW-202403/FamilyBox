@@ -10,13 +10,14 @@ import { Calendar } from "@/components/calendar"
 export default function ReservePage() {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [space, setSpace] = useState<string>('')
+
   const router = useRouter()
 
   const handleReserve = () => {
     if (date && space) {
-      // Here you would typically send a request to your backend to create the reservation
+      // Aquí típicamente enviarías una solicitud a tu backend para crear la reserva
       console.log('Reserva realizada:', { date, space })
-      // For now, we'll just redirect to the reservations page
+      // Por ahora, solo redirigimos a la página de reservas
       router.push('/user/reservations')
     } else {
       alert('Por favor, selecciona una fecha y un espacio.')
@@ -33,12 +34,14 @@ export default function ReservePage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
+            {/* Selección de espacio */}
             <div>
               <label htmlFor="space" className="block text-sm font-medium text-gray-700">
                 Espacio
               </label>
               <Select onValueChange={setSpace} value={space}>
-                <SelectTrigger id="space">
+                <SelectTrigger>
+                  {/* En lugar de "children", usamos SelectValue para mostrar el valor seleccionado */}
                   <SelectValue placeholder="Selecciona un espacio" />
                 </SelectTrigger>
                 <SelectContent>
@@ -48,6 +51,8 @@ export default function ReservePage() {
                 </SelectContent>
               </Select>
             </div>
+
+            {/* Selección de fecha */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Fecha
@@ -59,7 +64,9 @@ export default function ReservePage() {
                 className="rounded-md border"
               />
             </div>
-            <Button onClick={handleReserve} className="w-full">
+
+            {/* Botón de reserva */}
+            <Button onClick={handleReserve} className="w-full mt-4">
               Realizar Reserva
             </Button>
           </div>

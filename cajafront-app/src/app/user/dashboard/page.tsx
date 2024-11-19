@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -9,7 +7,8 @@ import LogoutButton from '@/components/ui/LogoutButton'
 
 export default function UserDashboard() {
   const router = useRouter()
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState<any>({});
+  
   useEffect(() => {
     const authToken = localStorage.getItem('jwt')
     if (!authToken) {
@@ -40,16 +39,16 @@ export default function UserDashboard() {
           user.rol == "user"
           ? (
             <Card>
-          <CardHeader>
-            <CardTitle>Mis Reservas</CardTitle>
-            <CardDescription>Ver y gestionar tus reservas</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild className="w-full">
-              <Link href="/user/reservations">Ver Mis Reservas</Link>
-            </Button>
-          </CardContent>
-        </Card>
+              <CardHeader>
+                <CardTitle>Mis Reservas</CardTitle>
+                <CardDescription>Ver y gestionar tus reservas</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button asChild className="w-full">
+                  <Link href="/user/reservations">Ver Mis Reservas</Link>
+                </Button>
+              </CardContent>
+            </Card>
           ) : ("")
         }
         <Card>
@@ -71,6 +70,17 @@ export default function UserDashboard() {
           <CardContent>
             <Button asChild className="w-full">
               <Link href="/user/notifications">Ver Notificaciones</Link>
+            </Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Editar Perfil</CardTitle>
+            <CardDescription>Actualizar tus detalles personales</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild className="w-full">
+              <Link href="/user/edit-profile">Editar Perfil</Link>
             </Button>
           </CardContent>
         </Card>
