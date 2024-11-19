@@ -8,12 +8,13 @@ public enum UserType {
 
 public class User
 {
-    String id {get; set;}
-    String name {get; set;}
-    String phone {get; set;}
-    int phoneCode {get; set;}
-    UserType type {get; set;}
-    String email {get; set;}
-    bool verified {get; set;}
-    String billingInfoId {get; set;}
+    public string id {get; set;}
+    public string password {get; set;}
+    public string name {get; set;}
+    public string phone {get; set;}
+    public int phoneCode {get; set;}
+    public UserType type {get; set;}
+    public string email {get; set;}
+    public bool verified {get; set;}
+   public string? billingInfoId {get; set;}
 }
