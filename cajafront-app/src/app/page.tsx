@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/label"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/label";
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -23,22 +23,28 @@ export default function Home() {
         'Content-Type': 'application/json',
         "Authorization": `Basic ${btoa(`${email}:${password}`)}`
       },
-    })
+    });
 
-    const data = await response.json()
+    const data = await response.json();
 
-    console.log(data)
+    console.log(data);
 
     if (response.status == 400) {
       setError('Cedula o contraseña inválidos');
       setEmail(""); setPassword("");
       return;
     }
+
     data.result.user.rol = data.result.user.rol === "Admin" ? "admin" : "user";
     localStorage.setItem('jwt', JSON.stringify(data.result));
 
     const role = data.result.user.rol === "Admin" ? "admin" : "user";
     router.push(`/${role}/dashboard`);
+  };
+
+  // Función para redirigir a la página de registro
+  const handleRegisterRedirect = () => {
+    router.push('/register'); // Redirige a la página de registro
   };
 
   return (
@@ -84,6 +90,13 @@ export default function Home() {
             Iniciar sesión
           </Button>
         </form>
+
+        {/* Botón de Registrarse */}
+        <div className="mt-4 text-center">
+          <Button type="button" className="w-full" onClick={handleRegisterRedirect}>
+            Registrarse
+          </Button>
+        </div>
       </main>
     </div>
   );
