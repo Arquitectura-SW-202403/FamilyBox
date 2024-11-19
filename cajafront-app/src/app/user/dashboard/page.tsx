@@ -18,11 +18,8 @@ export default function UserDashboard() {
     }
 
     try {
-      const { token, user } = JSON.parse(authToken)
-      setUser(user);
-      if (user.rol !== 'user') {
-        router.push('/unauthorized')
-      }
+      const { token, user: userr } = JSON.parse(authToken)
+      setUser(userr);
     } catch (error) {
       console.error('Error parsing auth token:', error)
       router.push('/')

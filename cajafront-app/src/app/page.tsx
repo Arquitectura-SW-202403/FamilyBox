@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,10 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+
+  useEffect(() => {
+    if (localStorage.getItem("jwt")) router.push("/user/dashboard")
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

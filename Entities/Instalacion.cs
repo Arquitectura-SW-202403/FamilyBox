@@ -1,6 +1,7 @@
 namespace Entities
 {
-    public class Instalacion{
+    public class Instalacion
+    {
         public int InstalacionId {get;set;}
         public int SedeId {get;set;}
         public string ? Nombre {get;set;}

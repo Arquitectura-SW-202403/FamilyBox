@@ -70,12 +70,13 @@ public class TokenController : ControllerBase
                 user = new {
                     nombre = user.Nombre,
                     id = user.UsuarioId,
-                    rol = user.TipoUsuario.ToString(),
+                    rol = user.TipoUsuario,
                     tipoDocumento = user.TipoDocumento,
                     email = user.Email,
                     telefono = user.Telefono,
                     fechaRegistro = user.FechaRegistro,
-                    estado = user.Estado
+                    estado = user.Estado,
+                    apellido = user.Apellido
                 }
             }
         );

@@ -53,7 +53,8 @@ public class UsersController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutUser(string id, Usuario user) 
     {
-        if (id != user.UsuarioId) return BadRequest();
+        if (id != user.UsuarioId) return HttpUtils.CreateHttpResponse<BadRequestResult>("No coinciden los IDs");
+        
         string confirm = await _service.UpdateUser(user);
         return confirm  == "OK" 
         ? HttpUtils.CreateHttpResponse<OkResult>("Usuario actualizado.") 

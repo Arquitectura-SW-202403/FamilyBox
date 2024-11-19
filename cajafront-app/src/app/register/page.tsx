@@ -7,8 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/label";
 
 export default function Register() {
-  const [fullName, setFullName] = useState('');
-  const [idCard, setIdCard] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [apellido, setApellido] = useState('');
+  const [cedula, setCedula] = useState('');
+  const [telefono, setTelefono] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -26,28 +28,53 @@ export default function Register() {
     }
 
     // Aquí puedes realizar la lógica para registrar al usuario, por ejemplo, hacer una petición POST
-    const response = await fetch(`${process.env.securityUrl}/api/register`, {
+
+    /**
+     * 
+     * 
+     * {
+          "usuarioId": "10342811291",
+          "tipoDocumento": "CC",
+          "nombre": "Sdebastrian",
+          "apellido": "Galindo",
+          "email": "email@gmaiol.com",
+          "telefono": "12313213",
+          "password": "firulo",
+          "tipoUsuario": 1,
+          "fechaRegistro": "2024-11-19T04:44:29.614Z",
+          "estado": true
+        }
+     * 
+     */
+
+    const response = await fetch(`${process.env.securityUrl}/api/token/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        fullName,
-        idCard,
-        email,
-        password,
+        "usuarioId": cedula,
+        "tipoDocumento": "CC",
+        "nombre": nombre,
+        "apellido": apellido,
+        "email": email,
+        "telefono": telefono,
+        "password": password,
+        "tipoUsuario": 1,
+        "fechaRegistro": "2024-11-19T04:44:29.614Z",
+        "estado": true
       }),
     });
 
     const data = await response.json();
 
-    if (response.status === 400) {
+    if (response.status !== 200) {
       setError('Hubo un error al registrar al usuario');
       return;
     }
 
     // Si el registro es exitoso, puedes redirigir al usuario
-    router.push('/login');
+    router.push('/');
   };
 
   return (
@@ -60,13 +87,25 @@ export default function Register() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="fullName">Nombre Completo</Label>
+            <Label htmlFor="fullName">Nombre</Label>
             <Input
               type="text"
               id="fullName"
-              placeholder="Tu nombre completo"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Tu nombre "
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="apellido">Apellido</Label>
+            <Input
+              type="text"
+              id="apellido"
+              placeholder="Tu apellido"
+              value={apellido}
+              onChange={(e) => setApellido(e.target.value)}
               required
             />
           </div>
@@ -76,8 +115,8 @@ export default function Register() {
               type="text"
               id="idCard"
               placeholder="xxxxx"
-              value={idCard}
-              onChange={(e) => setIdCard(e.target.value)}
+              value={cedula}
+              onChange={(e) => setCedula(e.target.value)}
               required
             />
           </div>
@@ -111,6 +150,18 @@ export default function Register() {
               placeholder="••••••••"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="phone">Telefono</Label>
+            <Input
+              type="text"
+              id="phone"
+              placeholder="Tu telefono"
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
               required
             />
           </div>

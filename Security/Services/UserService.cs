@@ -46,6 +46,10 @@ public class UserService : IUserService
     public async Task<string> UpdateUser(Usuario updt) 
     {
         try {
+            var pastUser = _context.Users.Find(updt.UsuarioId);
+            _context.Entry(pastUser).State = EntityState.Detached;        
+            updt.Password = pastUser!.Password;
+
             _context.Entry(updt).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return "OK";

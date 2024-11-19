@@ -8,7 +8,7 @@ export default function LogoutButton() {
 
   const handleLogout = () => {
     // Eliminar el token de autenticación
-    localStorage.removeItem('authToken')
+    localStorage.removeItem('jwt')
     // Redirigir al usuario a la página de inicio
     router.push('/')
   }

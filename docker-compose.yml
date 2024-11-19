@@ -34,12 +34,7 @@ services:
       - "8082:8082"
     networks:
       - family
-  next:
-    build: cajafront-app/.
-    ports:
-      - "3000:3000"
-    networks:
-      - family
+  
 networks:
   family:
     driver: bridge
