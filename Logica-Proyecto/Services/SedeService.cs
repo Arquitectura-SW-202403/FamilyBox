@@ -9,22 +9,24 @@ namespace Serivicios.Services{
     public class SedeService
 {
     private readonly HttpClient _httpClient;
+    private readonly string _dataURL;
 
     public SedeService(HttpClient httpClient)
     {
         _httpClient = httpClient;
+        _dataURL = Environment.GetEnvironmentVariable("DATA_URL")!;
     }
 
     public async Task<List<Sede>> GetAllSedesAsync()
     {
-        var response = await _httpClient.GetAsync("http://localhost:8080/api/Sede");
+        var response = await _httpClient.GetAsync($"{_dataURL}/api/Sede");
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<List<Sede>>();
     }
 
     public async Task<Sede> GetSedeByIdAsync(int id)
     {
-        var response = await _httpClient.GetAsync($"http://localhost:8080/api/Sede/{id}");
+        var response = await _httpClient.GetAsync($"{_dataURL}/api/Sede/{id}");
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadFromJsonAsync<Sede>();
         return null;
@@ -32,7 +34,7 @@ namespace Serivicios.Services{
 
      public async Task CreateSedeAsync(Sede sede)
     {
-        var url = "http://localhost:8080/api/Sede";
+        var url = $"{_dataURL}/api/Sede";
         var contenidoJson = JsonConvert.SerializeObject(sede);
         
         var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");
@@ -47,7 +49,7 @@ namespace Serivicios.Services{
 
     public async Task<bool> UpdateSedeAsync(Sede sede)
     {
-        var url = $"http://localhost:8080/api/Sede/{sede.SedeId}";  // URL de la API con el ID de la sede
+        var url = $"{_dataURL}/api/Sede/{sede.SedeId}";  // URL de la API con el ID de la sede
 
         var contenidoJson = JsonConvert.SerializeObject(sede);  // Serializamos el objeto Entity a JSON
         var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");  // Creamos el StringContent
@@ -67,7 +69,7 @@ namespace Serivicios.Services{
 
     public async Task<bool> DeleteSedeAsync(int id)
     {
-        var response = await _httpClient.DeleteAsync($"http://localhost:8080/api/Sede/{id}");
+        var response = await _httpClient.DeleteAsync($"{_dataURL}/api/Sede/{id}");
         return response.IsSuccessStatusCode;
     }
 }

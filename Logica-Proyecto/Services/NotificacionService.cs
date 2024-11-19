@@ -7,22 +7,24 @@ namespace Serivicios.Services{
     public class NotificacionService {
         
         private readonly HttpClient _httpClient;
+        private readonly string _dataURL;
 
         public NotificacionService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _dataURL = Environment.GetEnvironmentVariable("DATA_URL")!;
         }
 
         public async Task<List<Notificacion>> GetAllNotificacionsAsync()
         {
-            var response = await _httpClient.GetAsync("http://localhost:8080/api/Notificacion");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Notificacion");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<List<Notificacion>>();
         }
 
         public async Task<Notificacion> GetNotificacionByIdAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"http://localhost:8080/api/Notificacion/{id}");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Notificacion/{id}");
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<Notificacion>();
             return null;
@@ -30,7 +32,7 @@ namespace Serivicios.Services{
 
         public async Task CreateNotificacionAsync(Notificacion Notificacion)
         {
-            var url = "http://localhost:8080/api/Notificacion";
+            var url = $"{_dataURL}/api/Notificacion";
             var contenidoJson = JsonConvert.SerializeObject(Notificacion);
 
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");
@@ -45,7 +47,7 @@ namespace Serivicios.Services{
 
         public async Task<bool> UpdateNotificacionAsync(Notificacion Notificacion)
         {
-            var url = $"http://localhost:8080/api/Notificacion/{Notificacion.NotificacionId}";  // URL de la API con el ID de la Notificacion
+            var url = $"{_dataURL}/api/Notificacion/{Notificacion.NotificacionId}";  // URL de la API con el ID de la Notificacion
 
             var contenidoJson = JsonConvert.SerializeObject(Notificacion);  // Serializamos el objeto Entity a JSON
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");  // Creamos el StringContent
@@ -65,7 +67,7 @@ namespace Serivicios.Services{
 
         public async Task<bool> DeleteNotificacionAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"http://localhost:8080/api/Notificacion/{id}");
+            var response = await _httpClient.DeleteAsync($"{_dataURL}/api/Notificacion/{id}");
             return response.IsSuccessStatusCode;
         }
     }

@@ -1,3 +1,4 @@
+using dotenv.net;
 using Microsoft.EntityFrameworkCore;
 using Persistencia;
 using Persistencia.Data;
@@ -6,12 +7,14 @@ using Persistencia.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configura el DbContext para usar SQLite
+DotEnv.Load();
+
+Console.WriteLine(Environment.GetEnvironmentVariable("MYSQL_URI"));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseMySQL(Environment.GetEnvironmentVariable("MYSQL_URI")!)
+);
 
 
-builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IEventoRepository, EventoRepository>();
 builder.Services.AddScoped<IInstalacionRepository, InstalacionRepository>();
 builder.Services.AddScoped<ISedeRepository, SedeRepository>();
@@ -30,6 +33,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+     app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {
@@ -43,9 +48,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
-app.MapControllerRoute(
+app.MapControllers();
+/*app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");*/
 
 app.Run();

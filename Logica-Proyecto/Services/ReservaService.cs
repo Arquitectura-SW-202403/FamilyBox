@@ -9,22 +9,24 @@ namespace Serivicios.Services
     {
 
         private readonly HttpClient _httpClient;
+        private readonly string _dataURL;
 
         public ReservaService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _dataURL = Environment.GetEnvironmentVariable("DATA_URL")!;
         }
 
         public async Task<List<Reserva>> GetAllReservasAsync()
         {
-            var response = await _httpClient.GetAsync("http://localhost:8080/api/Reserva");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Reserva");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<List<Reserva>>();
         }
 
         public async Task<Reserva> GetReservaByIdAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"http://localhost:8080/api/Reserva/{id}");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Reserva/{id}");
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<Reserva>();
             return null;
@@ -32,7 +34,7 @@ namespace Serivicios.Services
 
         public async Task CreateReservaAsync(Reserva Reserva)
         {
-            var url = "http://localhost:8080/api/Reserva";
+            var url = $"{_dataURL}/api/Reserva";
             var contenidoJson = JsonConvert.SerializeObject(Reserva);
 
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");
@@ -47,7 +49,7 @@ namespace Serivicios.Services
 
         public async Task<bool> UpdateReservaAsync(Reserva Reserva)
         {
-            var url = $"http://localhost:8080/api/Reserva/{Reserva.ReservaId}";  // URL de la API con el ID de la Reserva
+            var url = $"{_dataURL}/api/Reserva/{Reserva.ReservaId}";  // URL de la API con el ID de la Reserva
 
             var contenidoJson = JsonConvert.SerializeObject(Reserva);  // Serializamos el objeto Entity a JSON
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");  // Creamos el StringContent
@@ -67,7 +69,7 @@ namespace Serivicios.Services
 
         public async Task<bool> DeleteReservaAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"http://localhost:8080/api/Reserva/{id}");
+            var response = await _httpClient.DeleteAsync($"{_dataURL}/api/Reserva/{id}");
             return response.IsSuccessStatusCode;
         }
     }

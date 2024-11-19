@@ -9,22 +9,24 @@ namespace Serivicios.Services
     {
 
         private readonly HttpClient _httpClient;
+        private readonly string _dataURL;
 
         public PagoService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _dataURL = Environment.GetEnvironmentVariable("DATA_URL")!;
         }
 
         public async Task<List<Pago>> GetAllPagosAsync()
         {
-            var response = await _httpClient.GetAsync("http://localhost:8080/api/Pago");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Pago");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<List<Pago>>();
         }
 
         public async Task<Pago> GetPagoByIdAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"http://localhost:8080/api/Pago/{id}");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Pago/{id}");
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<Pago>();
             return null;
@@ -32,7 +34,7 @@ namespace Serivicios.Services
 
         public async Task CreatePagoAsync(Pago Pago)
         {
-            var url = "http://localhost:8080/api/Pago";
+            var url = $"{_dataURL}/api/Pago";
             var contenidoJson = JsonConvert.SerializeObject(Pago);
 
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");
@@ -47,7 +49,7 @@ namespace Serivicios.Services
 
         public async Task<bool> UpdatePagoAsync(Pago Pago)
         {
-            var url = $"http://localhost:8080/api/Pago/{Pago.PagoId}";  // URL de la API con el ID de la Pago
+            var url = $"{_dataURL}/api/Pago/{Pago.PagoId}";  // URL de la API con el ID de la Pago
 
             var contenidoJson = JsonConvert.SerializeObject(Pago);  // Serializamos el objeto Entity a JSON
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");  // Creamos el StringContent
@@ -67,7 +69,7 @@ namespace Serivicios.Services
 
         public async Task<bool> DeletePagoAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"http://localhost:8080/api/Pago/{id}");
+            var response = await _httpClient.DeleteAsync($"{_dataURL}/api/Pago/{id}");
             return response.IsSuccessStatusCode;
         }
     }

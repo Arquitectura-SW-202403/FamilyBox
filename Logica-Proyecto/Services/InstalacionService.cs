@@ -9,22 +9,24 @@ namespace Serivicios.Services
     {
 
         private readonly HttpClient _httpClient;
+        private readonly string _dataURL;
 
         public InstalacionService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _dataURL = Environment.GetEnvironmentVariable("DATA_URL")!;
         }
 
         public async Task<List<Instalacion>> GetAllInstalacionsAsync()
         {
-            var response = await _httpClient.GetAsync("http://localhost:8080/api/Instalacion");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Instalacion");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<List<Instalacion>>();
         }
 
         public async Task<Instalacion> GetInstalacionByIdAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"http://localhost:8080/api/Instalacion/{id}");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Instalacion/{id}");
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<Instalacion>();
             return null;
@@ -32,7 +34,7 @@ namespace Serivicios.Services
 
         public async Task CreateInstalacionAsync(Instalacion Instalacion)
         {
-            var url = "http://localhost:8080/api/Instalacion";
+            var url = $"{_dataURL}/api/Instalacion";
             var contenidoJson = JsonConvert.SerializeObject(Instalacion);
 
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");
@@ -47,7 +49,7 @@ namespace Serivicios.Services
 
         public async Task<bool> UpdateInstalacionAsync(Instalacion Instalacion)
         {
-            var url = $"http://localhost:8080/api/Instalacion/{Instalacion.InstalacionId}";  // URL de la API con el ID de la Instalacion
+            var url = $"{_dataURL}/api/Instalacion/{Instalacion.InstalacionId}";  // URL de la API con el ID de la Instalacion
 
             var contenidoJson = JsonConvert.SerializeObject(Instalacion);  // Serializamos el objeto Entity a JSON
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");  // Creamos el StringContent
@@ -67,7 +69,7 @@ namespace Serivicios.Services
 
         public async Task<bool> DeleteInstalacionAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"http://localhost:8080/api/Instalacion/{id}");
+            var response = await _httpClient.DeleteAsync($"{_dataURL}/api/Instalacion/{id}");
             return response.IsSuccessStatusCode;
         }
     }

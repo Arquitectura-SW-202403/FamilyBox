@@ -1,6 +1,9 @@
+using dotenv.net;
 using Serivicios.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+DotEnv.Load();
 
 // Configuración de HttpClient con URL base para el servicio Jakarta
 builder.Services.AddHttpClient<EventoService>((serviceProvider, client) =>
@@ -63,7 +66,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

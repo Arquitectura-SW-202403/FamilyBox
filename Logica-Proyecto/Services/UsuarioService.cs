@@ -7,22 +7,24 @@ namespace Serivicios.Services{
     public class UsuarioService{
         
         private readonly HttpClient _httpClient;
+        private readonly string _dataURL;
 
         public UsuarioService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _dataURL = Environment.GetEnvironmentVariable("DATA_URL")!;
         }
 
         public async Task<List<Usuario>> GetAllUsuariosAsync()
         {
-            var response = await _httpClient.GetAsync("http://localhost:8080/api/Usuario");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Usuario");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<List<Usuario>>();
         }
 
         public async Task<Usuario> GetUsuarioByIdAsync(string id)
         {
-            var response = await _httpClient.GetAsync($"http://localhost:8080/api/Usuario/{id}");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Usuario/{id}");
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<Usuario>();
             return null;
@@ -30,7 +32,7 @@ namespace Serivicios.Services{
 
         public async Task CreateUsuarioAsync(Usuario Usuario)
         {
-            var url = "http://localhost:8080/api/Usuario";
+            var url = $"{_dataURL}/api/Usuario";
             var contenidoJson = JsonConvert.SerializeObject(Usuario);
 
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");
@@ -45,7 +47,7 @@ namespace Serivicios.Services{
 
         public async Task<bool> UpdateUsuarioAsync(Usuario Usuario)
         {
-            var url = $"http://localhost:8080/api/Usuario/{Usuario.UsuarioId}";  // URL de la API con el ID de la Usuario
+            var url = $"{_dataURL}/api/Usuario/{Usuario.UsuarioId}";  // URL de la API con el ID de la Usuario
 
             var contenidoJson = JsonConvert.SerializeObject(Usuario);  // Serializamos el objeto Entity a JSON
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");  // Creamos el StringContent
@@ -65,7 +67,7 @@ namespace Serivicios.Services{
 
         public async Task<bool> DeleteUsuarioAsync(string id)
         {
-            var response = await _httpClient.DeleteAsync($"http://localhost:8080/api/Usuario/{id}");
+            var response = await _httpClient.DeleteAsync($"{_dataURL}/api/Usuario/{id}");
             return response.IsSuccessStatusCode;
         }
     }

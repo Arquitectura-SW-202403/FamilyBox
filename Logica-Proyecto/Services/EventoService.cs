@@ -9,22 +9,24 @@ namespace Serivicios.Services
     {
 
         private readonly HttpClient _httpClient;
+        private readonly string _dataURL;
 
         public EventoService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _dataURL = Environment.GetEnvironmentVariable("DATA_URL")!;
         }
 
         public async Task<List<Evento>> GetAllEventosAsync()
         {
-            var response = await _httpClient.GetAsync("http://localhost:8080/api/Evento");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Evento");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<List<Evento>>();
         }
 
         public async Task<Evento> GetEventoByIdAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"http://localhost:8080/api/Evento/{id}");
+            var response = await _httpClient.GetAsync($"{_dataURL}/api/Evento/{id}");
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<Evento>();
             return null;
@@ -32,7 +34,7 @@ namespace Serivicios.Services
 
         public async Task CreateEventoAsync(Evento Evento)
         {
-            var url = "http://localhost:8080/api/Evento";
+            var url = $"{_dataURL}/api/Evento";
             var contenidoJson = JsonConvert.SerializeObject(Evento);
 
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");
@@ -47,7 +49,7 @@ namespace Serivicios.Services
 
         public async Task<bool> UpdateEventoAsync(Evento Evento)
         {
-            var url = $"http://localhost:8080/api/Evento{Evento.EventoId}";  // URL de la API con el ID de la Evento
+            var url = $"{_dataURL}/api/Evento{Evento.EventoId}";  // URL de la API con el ID de la Evento
 
             var contenidoJson = JsonConvert.SerializeObject(Evento);  // Serializamos el objeto Entity a JSON
             var content = new StringContent(contenidoJson, Encoding.UTF8, "application/json");  // Creamos el StringContent
@@ -67,7 +69,7 @@ namespace Serivicios.Services
 
         public async Task<bool> DeleteEventoAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"http://localhost:8080/api/Evento({id}");
+            var response = await _httpClient.DeleteAsync($"{_dataURL}/api/Evento({id}");
             return response.IsSuccessStatusCode;
         }
     }

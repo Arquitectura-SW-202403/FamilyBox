@@ -1,9 +1,39 @@
 services:
-
   security:
     build: 
       context: .
       dockerfile: ./Security/Dockerfile
     ports:
       - "8080:8080"
-    
+    networks:
+      - family
+  persistency:
+    build:
+      context: .
+      dockerfile: ./Persistencia-Proyecto/Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - family
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=proyecto_as
+      - MYSQL_USER=taller4
+      - MYSQL_PASSWORD=taller4
+    ports:
+      - "3306:3306"
+    networks:
+      - family
+  logic:
+    build:
+      context: .
+      dockerfile: ./Logica-Proyecto/Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      - family
+networks:
+  family:
+    driver: bridge

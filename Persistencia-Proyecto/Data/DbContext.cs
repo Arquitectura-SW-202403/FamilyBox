@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Persistencia.Data{
     using Microsoft.EntityFrameworkCore;
     using Entities;
+    using DnsClient.Protocol;
+    using Microsoft.EntityFrameworkCore.Infrastructure;
+    using Microsoft.EntityFrameworkCore.Storage;
 
     public class ApplicationDbContext : DbContext
 {
@@ -17,6 +20,12 @@ namespace Persistencia.Data{
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
+        Database.EnsureCreated();
+        try {
+            var databaseCreator = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
+            databaseCreator.CreateTables();
+        } catch (Exception e) {
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
