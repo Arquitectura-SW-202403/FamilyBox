@@ -2,7 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
     env: {
-      securityUrl: "https://localhost:7075"
+      securityUrl: "http://localhost:8080",
+      logicUrl: "http://localhost:8082"
     }
 };
 
