@@ -1,0 +1,9 @@
+services:
+
+  security:
+    build: 
+      context: .
+      dockerfile: ./Security/Dockerfile
+    ports:
+      - "8080:8080"
+    
